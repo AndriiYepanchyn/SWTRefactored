@@ -18,13 +18,11 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
 import swtRefactored.UIElements.BrowserBuilder;
+import swtRefactored.UIElements.ButtonEvaluateBuilder;
 import swtRefactored.UIElements.TabFolderBuilder;
 
 public class UI {
-	private String v1;
-	private String v2;
-	private String resultString;
-	private int operationIndex = 0;
+	public DTO dto = DTO.getInstance();
 	private boolean isCalculateOnFlyEnabled = false;
 
 	private Shell mainWindow;
@@ -42,22 +40,24 @@ public class UI {
 		}
 	};
 
+	//Checked
 	public UI(Shell window) {
 		this.mainWindow = window;
 	}
 
+	//Checked
 	public void create() {
-		TabFolder tabFolder = new TabFolderBuilder().build(mainWindow,2);
-		TabItem tbCalc = fillCalcItem(tabFolder);
-		TabItem tbHistory = fillHistoryItem(tabFolder);
+		TabFolder tabFolder = new TabFolderBuilder().build(mainWindow, 2);
+		createCalcItem(tabFolder);
+		createHistoryItem(tabFolder);
 	}
 
-	private TabItem fillCalcItem(TabFolder tabFolder) {
+	//
+	private TabItem createCalcItem(TabFolder tabFolder) {
 		TabItem answer = tabFolder.getItem(0);
 		answer.setText("Calculator");
 		// Prepare layouts
 		GridLayout generalGridLayout = new GridLayout(1, true);
-		
 		GridLayout textAreaLayout = new GridLayout(7, false);
 		textAreaLayout.numColumns = 7;
 		textAreaLayout.makeColumnsEqualWidth = false;
@@ -83,7 +83,9 @@ public class UI {
 		value2 = createTextElement(textAreaComposite);
 		equalSign = createEqualSignTextElement(textAreaComposite);
 		resultText = createResultTextElement(textAreaComposite);
-		// Create 
+		
+		// Create Evaluate button
+
 		evaluateButton = createEvaluateButton(buttonAreaComposite);
 		checkButton = createCheckButton(buttonAreaComposite);
 
@@ -91,17 +93,19 @@ public class UI {
 		return answer;
 	}
 
-	private Text createTextElement(Composite parent) {	
+	//Checked
+	private Text createTextElement(Composite parent) {
 		GridData textGridData = new GridData(80, 17);
 		textGridData.verticalAlignment = GridData.VERTICAL_ALIGN_BEGINNING;
 		textGridData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_END;
-		
+
 		Text textElement = new Text(parent, SWT.RIGHT | SWT.BORDER);
 		textElement.setLayoutData(textGridData);
 		textElement.addModifyListener(ml);
 		return textElement;
 	}
 
+	//Checked
 	private Combo createComboElement(Composite parent) {
 		Combo comboElement = new Combo(parent, SWT.CENTER | SWT.READ_ONLY);
 		comboElement.setItems(Calculations.op);
@@ -112,20 +116,20 @@ public class UI {
 
 			@Override
 			public void handleEvent(Event event) {
-				operationIndex = comboElement.getSelectionIndex();
-				if (operationIndex == 6) {
+				dto.operationIndex = comboElement.getSelectionIndex();
+				if (dto.operationIndex == 6) {
 					value2.setEnabled(false);
 					value2.setText("");
 				} else {
 					value2.setEnabled(true);
 				}
-//				onFieldCanged();
 				setTemporaryVariables(false);
 			}
 		});
 		return comboElement;
 	}
 
+	//Checked
 	private Text createEqualSignTextElement(Composite parent) {
 		Text equalSign = new Text(parent, SWT.NONE);
 		equalSign.setText("=");
@@ -134,8 +138,9 @@ public class UI {
 		equalSign.setEnabled(false);
 		return equalSign;
 	}
-	
-	private Text createResultTextElement(Composite parent){
+
+	//Checked
+	private Text createResultTextElement(Composite parent) {
 		Text resultText = new Text(parent, SWT.RIGHT | SWT.READ_ONLY | SWT.BORDER);
 		resultText.setText("0.00");
 		resultText.setEnabled(true);
@@ -147,23 +152,21 @@ public class UI {
 		resultText.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		return resultText;
 	}
-	
+
+	//Checked
 	private Button createEvaluateButton(Composite parent) {
-		Button craeatedButton = new Button(buttonAreaComposite, SWT.PUSH | SWT.LEFT);
-		craeatedButton.setText("E&valuate");
-		craeatedButton.setAlignment(SWT.CENTER);
+		Button craeatedButton = new ButtonEvaluateBuilder().build(parent);
 		craeatedButton.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				// TODO
 				setTemporaryVariables(true);
 			}
 		});
-
 		return craeatedButton;
 	}
 
-	private Button createCheckButton(Composite parent){
+	//Checked
+	private Button createCheckButton(Composite parent) {
 		Button checkButton = new Button(buttonAreaComposite, SWT.CHECK);
 		checkButton.setText("Calculate on fly");
 		checkButton.setSelection(false);
@@ -174,22 +177,23 @@ public class UI {
 				evaluateButton.setEnabled(!checkButton.getSelection());
 			}
 		});
-		
 		return checkButton;
 	}
-	
-	private TabItem fillHistoryItem(TabFolder tabFolder) {
-		browser = BrowserBuilder.build(tabFolder);
+
+	//Checked
+	private TabItem createHistoryItem(TabFolder tabFolder) {
 		TabItem answer = tabFolder.getItem(1);
 		answer.setText("History");
+		browser = BrowserBuilder.build(tabFolder);
 		answer.setControl(browser);
 		return answer;
 	}
 
+	//TODO
 	private void refreshData(Text label, Browser browser) {
-		try {
-			resultString = Calculations.proceed(v1, v2, operationIndex);
-			label.setText(resultString);
+		try {		
+			dto.resultString = Calculations.proceed(dto.value1, dto.value2, dto.operationIndex);
+			label.setText(dto.resultString);
 			label.redraw();
 			if (browser != null) {
 				browser.setText(Calculations.getHTMLData());
@@ -199,19 +203,19 @@ public class UI {
 		}
 	}
 
+	//TODO
 	private void setTemporaryVariables(boolean immediate) {
-		v1 = value1.getText();
-		v2 = value2.getText();
-		operationIndex = operationChooser.getSelectionIndex();
+		dto.value1 = value1.getText();
+		dto.value2 = value2.getText();
+		dto.operationIndex = operationChooser.getSelectionIndex();
+
 		if (immediate) {
 			refreshData(resultText, browser);
 		} else {
 			isCalculateOnFlyEnabled = checkButton.getSelection();
-
 			if (isCalculateOnFlyEnabled) {
 				refreshData(resultText, browser);
 			}
 		}
 	}
-
 }
