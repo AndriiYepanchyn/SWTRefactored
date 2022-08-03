@@ -11,7 +11,6 @@ public class Main {
 		Display display = new Display();
 		Shell mainWindow = new WindowBuilder().build(display);
 		UI calc = new UI(mainWindow);
-		calc.create();
 
 		// Proceed_window
 		mainWindow.open();

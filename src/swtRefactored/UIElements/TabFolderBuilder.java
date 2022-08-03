@@ -12,7 +12,6 @@ public class TabFolderBuilder {
 	TabFolder tabFolder;
 	TabItem[] tabItems;
 
-
 	public TabFolder build(Shell shell, int n) {
 		this.tabFolder = new TabFolder(shell, SWT.NONE);
 		tabFolder.setLayout(new FillLayout(SWT.VERTICAL));
@@ -20,7 +19,12 @@ public class TabFolderBuilder {
 			TabItem[] tabItems = new TabItem[n];
 			for (int i = 0; i < n; i++) {
 				tabItems[i] = new TabItem(tabFolder, SWT.NONE);
-				tabItems[i].setText("TabItem " + (i+1));
+				if(i==0) {
+					tabItems[i] = new CalcTabItemBuilder().create(tabFolder, i);
+				}
+				if(i==1) {
+					tabItems[i] = HistoryTabItemBuilder.create(tabFolder,i);
+				}
 			}
 		}
 		return tabFolder;
