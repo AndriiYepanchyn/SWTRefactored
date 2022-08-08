@@ -1,4 +1,4 @@
-package mathOperations;
+package swtRefactored.mathOperations;
 
 import java.util.HashMap;
 import java.util.Map;

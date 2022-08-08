@@ -1,6 +1,6 @@
-package swtRefactored;
+package swtRefactored.model;
 
-import mathOperations.MathOperation;
+import swtRefactored.mathOperations.MathOperation;
 
 public class DataTransferObject {
 	private static DataTransferObject instance;

@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
-import swtRefactored.DataTransferObject;
+import swtRefactored.model.DataTransferObject;
 
 public class HistoryComposite extends Composite {
 	Browser browser;

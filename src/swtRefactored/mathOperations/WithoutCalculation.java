@@ -1,4 +1,4 @@
-package mathOperations;
+package swtRefactored.mathOperations;
 
 public class WithoutCalculation extends MathOperation {
 

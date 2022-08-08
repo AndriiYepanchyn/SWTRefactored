@@ -1,4 +1,4 @@
-package mathOperations;
+package swtRefactored.mathOperations;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

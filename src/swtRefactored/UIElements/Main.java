@@ -1,10 +1,7 @@
-package swtRefactored;
+package swtRefactored.UIElements;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-
-import swtRefactored.UIElements.UI;
-import swtRefactored.UIElements.WindowBuilder;
 
 public class Main {
 

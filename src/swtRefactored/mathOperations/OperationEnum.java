@@ -1,4 +1,4 @@
-package mathOperations;
+package swtRefactored.mathOperations;
 
 public enum OperationEnum {
 

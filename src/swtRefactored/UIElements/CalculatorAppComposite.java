@@ -4,12 +4,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.Text;
 
-import swtRefactored.DataTransferObject;
+import swtRefactored.model.DataTransferObject;
 
 public class CalculatorAppComposite{
 	public static CalculatorAppComposite instance;
@@ -69,4 +71,22 @@ public class CalculatorAppComposite{
 	public CalculatorComposite getCalculatorComposite() {
 		return calcPanel;
 	}
+	
+	public Text getValue1() {
+		return getCalculatorComposite().value1;
+	}
+
+	public Text getValue2() {
+		return getCalculatorComposite().value2;
+	}
+	
+	public boolean isOnFlyMode() {
+		return getCalculatorComposite().checkButton.getSelection();
+	}
+	
+	public Text getResult() {
+		return getCalculatorComposite().resultText;
+	}
+	
+	
 }

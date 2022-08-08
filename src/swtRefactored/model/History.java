@@ -1,4 +1,4 @@
-package swtRefactored;
+package swtRefactored.model;
 
 import java.util.ArrayList;
 
