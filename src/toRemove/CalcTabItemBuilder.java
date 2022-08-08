@@ -91,7 +91,7 @@ public class CalcTabItemBuilder {
 			public void handleEvent(Event event) {
 				int index = comboElement.getSelectionIndex();
 				String operationName = comboElement.getItem(index);
-				dto.operation = OperationUtils.getInstance().getOperation(operationName);
+//				dto.operation = OperationUtils.getInstance().getOperation(operationName);
 				if (index == 6) {
 					value2.setEnabled(false);
 					value2.setText("");

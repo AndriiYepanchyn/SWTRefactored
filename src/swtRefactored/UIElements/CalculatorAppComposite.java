@@ -16,8 +16,6 @@ public class CalculatorAppComposite{
 	private static final String TITLE_CALCULATOR = "Calculator";
 	private static final String TITLE_HISTORY = "History";
 		
-	private DataTransferObject dto = DataTransferObject.getInstance();
-
 	private TabFolder tabFolder;
 	private TabItem calcTabItem, historyTabItem;
 	

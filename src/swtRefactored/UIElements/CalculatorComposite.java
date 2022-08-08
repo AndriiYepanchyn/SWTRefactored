@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Text;
 
 import mathOperations.OperationEnum;
 import mathOperations.OperationUtils;
+import mathOperations.WithoutCalculation;
 import swtRefactored.DataTransferObject;
 
 public class CalculatorComposite extends Composite {
@@ -39,7 +40,7 @@ public class CalculatorComposite extends Composite {
 
 		// Prepare layouts
 		GridLayout generalGridLayout = new GridLayout(1, true);
-		
+
 		GridLayout textAreaLayout = new GridLayout(7, false);
 		textAreaLayout.numColumns = 7;
 		textAreaLayout.makeColumnsEqualWidth = false;
@@ -83,6 +84,7 @@ public class CalculatorComposite extends Composite {
 		Combo comboElement = new Combo(parent, SWT.CENTER | SWT.READ_ONLY);
 		comboElement.setItems(OperationEnum.getAllSurrogates());
 		comboElement.select(0);
+		dto.operation = OperationUtils.getOperation(OperationUtils.OPERATION_NONE);
 		comboElement.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		comboElement.setLayoutData(new GridData(80, 15));
 		comboElement.addListener(SWT.Selection, new Listener() {
@@ -90,7 +92,7 @@ public class CalculatorComposite extends Composite {
 			public void handleEvent(Event event) {
 				int index = comboElement.getSelectionIndex();
 				String operationName = comboElement.getItem(index);
-				dto.operation = OperationUtils.getInstance().getOperation(operationName);
+				dto.operation = OperationUtils.getOperation(operationName);
 				if (index == 6) {
 					value2.setEnabled(false);
 					value2.setText("");
@@ -153,28 +155,20 @@ public class CalculatorComposite extends Composite {
 	public void evaluate() {
 		dto.value1 = value1.getText();
 		dto.value2 = value2.getText();
-		// dto.operation changing on handleEvent in ComboBox
-		dto.resultString = dto.operation.calculate(dto.value1, dto.value2);
-		dto.records.add(dto.value1, dto.operation.shownAs, dto.value2, dto.resultString);
+		if (dto.operation != null && !(dto.operation instanceof WithoutCalculation)) {
+			dto.resultString = dto.operation.calculate(dto.value1, dto.value2);
+			dto.records.add(dto.value1, dto.operation.shownAs, dto.value2, dto.resultString);
+		}
 	}
 
 	public void refreshAll() {
 		try {
-			value1.setText(dto.value1);
-			value2.setText(dto.value2);
 			resultText.setText(dto.resultString);
 			value1.redraw();
 			value2.redraw();
 			resultText.redraw();
-
-			Browser browser = CalculatorAppComposite.getInstance().getHistoryComposite().browser;	
-			if (browser != null) {
-				browser.setText(dto.records.getConvertedToHTML());
-			}
-			System.out.println(dto.records.getConvertedToHTML());
 			CalculatorAppComposite.getInstance().getHistoryComposite().refresh();
-			System.out.println("======================");
-			System.out.println(browser.getText());
+
 		} catch (NumberFormatException exception) {
 			resultText.setText("Input is invalid");
 		}
