@@ -2,13 +2,13 @@ package swtRefactored;
 
 import mathOperations.MathOperation;
 
-public class DTO {
-	private static DTO instance;
+public class DataTransferObject {
+	private static DataTransferObject instance;
 	public String value1, value2, resultString;
 	public MathOperation operation;
 	public History records;
 
-	private DTO() {
+	private DataTransferObject() {
 		value1 = "";
 		value2 = "";
 		resultString = "";
@@ -16,9 +16,9 @@ public class DTO {
 		records = new History();
 	}
 
-	public static synchronized DTO getInstance() {
+	public static synchronized DataTransferObject getInstance() {
 		if (instance == null) {
-			instance = new DTO();
+			instance = new DataTransferObject();
 		}
 		return instance;
 	}

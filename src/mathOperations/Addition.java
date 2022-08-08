@@ -10,8 +10,9 @@ public class Addition extends MathOperation {
 
 	@Override
 	public String calculate(String v1, String v2) {
-		BigDecimal value1 = new BigDecimal(v1);
-		BigDecimal value2 = new BigDecimal(v2);
+		checkInput(v1,v2);
+		BigDecimal value1 = v1 == null? new BigDecimal(0): new BigDecimal(v1);
+		BigDecimal value2 = v2 == null? new BigDecimal(0): new BigDecimal(v2);
 		return trim(value1.add(value2)).toString();
 	}
 

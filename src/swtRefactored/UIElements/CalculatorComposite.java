@@ -1,8 +1,10 @@
 package swtRefactored.UIElements;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -11,29 +13,33 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
 import mathOperations.OperationEnum;
 import mathOperations.OperationUtils;
-import swtRefactored.DTO;
+import swtRefactored.DataTransferObject;
 
-public class CalcTabItemBuilder {
-	public DTO dto = DTO.getInstance();
-	private boolean isCalculateOnFlyEnabled = false;
-	
-	static Text value1, value2, resultText, equalSign;
-	static Combo operationChooser;
-	static Button evaluateButton, checkButton;
-	Composite generalCompositeForFirstItem, textAreaComposite, buttonAreaComposite;
+public class CalculatorComposite extends Composite {
+	public DataTransferObject dto;
+	private boolean isCalculateOnFlyEnabled;
 
-	public TabItem create(TabFolder tabFolder, int index) {
-		TabItem answer = tabFolder.getItem(index);
-		answer.setText("Manual Calculator");
+	Text value1, value2, resultText, equalSign;
+	Combo operationChooser;
+	Button evaluateButton, checkButton;
+
+	public CalculatorComposite(Composite parent) {
+		super(parent, SWT.BORDER);
+		createContent(parent);
+	}
+
+	private void createContent(Composite parent) {
+		super.dispose();
+		Composite textAreaComposite, buttonAreaComposite;
+		dto = DataTransferObject.getInstance();
 
 		// Prepare layouts
 		GridLayout generalGridLayout = new GridLayout(1, true);
+		
 		GridLayout textAreaLayout = new GridLayout(7, false);
 		textAreaLayout.numColumns = 7;
 		textAreaLayout.makeColumnsEqualWidth = false;
@@ -44,13 +50,10 @@ public class CalcTabItemBuilder {
 		GridLayout buttonAreaLayout = new GridLayout(2, false);
 
 		// prepare composites
-		generalCompositeForFirstItem = new Composite(tabFolder, SWT.NONE);
-		generalCompositeForFirstItem.setLayout(generalGridLayout);
-
-		textAreaComposite = new Composite(generalCompositeForFirstItem, SWT.NONE);
+		textAreaComposite = new Composite(parent, SWT.BORDER);
 		textAreaComposite.setLayout(textAreaLayout);
 
-		buttonAreaComposite = new Composite(generalCompositeForFirstItem, SWT.NONE);
+		buttonAreaComposite = new Composite(parent, SWT.BORDER);
 		buttonAreaComposite.setLayout(buttonAreaLayout);
 
 		// Create textArea elements
@@ -63,9 +66,6 @@ public class CalcTabItemBuilder {
 		// Create Evaluate button
 		evaluateButton = createEvaluateButton(buttonAreaComposite);
 		checkButton = createCheckButton(buttonAreaComposite);
-
-		answer.setControl(generalCompositeForFirstItem);
-		return answer;
 	}
 
 	private Text createTextElement(Composite parent) {
@@ -75,11 +75,11 @@ public class CalcTabItemBuilder {
 
 		Text textElement = new Text(parent, SWT.RIGHT | SWT.BORDER);
 		textElement.setLayoutData(textGridData);
-		textElement.addModifyListener(ml);
+		textElement.addModifyListener(modifyListener);
 		return textElement;
 	}
-	
-	private  Combo createComboElement(Composite parent) {
+
+	private Combo createComboElement(Composite parent) {
 		Combo comboElement = new Combo(parent, SWT.CENTER | SWT.READ_ONLY);
 		comboElement.setItems(OperationEnum.getAllSurrogates());
 		comboElement.select(0);
@@ -102,7 +102,7 @@ public class CalcTabItemBuilder {
 		});
 		return comboElement;
 	}
-	
+
 	private Text createEqualSignTextElement(Composite parent) {
 		Text equalSign = new Text(parent, SWT.NONE);
 		equalSign.setText("=");
@@ -135,9 +135,9 @@ public class CalcTabItemBuilder {
 		});
 		return craeatedButton;
 	}
-	
+
 	private Button createCheckButton(Composite parent) {
-		Button checkButton = new Button(buttonAreaComposite, SWT.CHECK);
+		Button checkButton = new Button(parent, SWT.CHECK);
 		checkButton.setText("Calculate on fly");
 		checkButton.setSelection(false);
 		checkButton.setBounds(60, 10, 20, 20);
@@ -157,7 +157,7 @@ public class CalcTabItemBuilder {
 		dto.resultString = dto.operation.calculate(dto.value1, dto.value2);
 		dto.records.add(dto.value1, dto.operation.shownAs, dto.value2, dto.resultString);
 	}
-	
+
 	public void refreshAll() {
 		try {
 			value1.setText(dto.value1);
@@ -166,9 +166,15 @@ public class CalcTabItemBuilder {
 			value1.redraw();
 			value2.redraw();
 			resultText.redraw();
-//			if (browser != null) {
-//				browser.setText(dto.records.getHistoryAsHTML());
-//			}
+
+			Browser browser = CalculatorAppComposite.getInstance().getHistoryComposite().browser;	
+			if (browser != null) {
+				browser.setText(dto.records.getConvertedToHTML());
+			}
+			System.out.println(dto.records.getConvertedToHTML());
+			CalculatorAppComposite.getInstance().getHistoryComposite().refresh();
+			System.out.println("======================");
+			System.out.println(browser.getText());
 		} catch (NumberFormatException exception) {
 			resultText.setText("Input is invalid");
 		}
@@ -181,11 +187,11 @@ public class CalcTabItemBuilder {
 			refreshAll();
 		}
 	}
-	
-	ModifyListener ml = new ModifyListener() {
+
+	ModifyListener modifyListener = new ModifyListener() {
 		@Override
 		public void modifyText(ModifyEvent e) {
 			proceedEvoluationProcedure(false);
 		}
-	};	
+	};
 }

@@ -10,6 +10,7 @@ public class Subtraction extends MathOperation {
 
 	@Override
 	public String calculate(String v1, String v2) {
+		checkInput(v1,v2);
 		BigDecimal value1 = new BigDecimal(v1);
 		BigDecimal value2 = new BigDecimal(v2);
 		return trim(value1.subtract(value2)).toString();

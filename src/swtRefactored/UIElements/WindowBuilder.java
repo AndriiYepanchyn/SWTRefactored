@@ -19,7 +19,7 @@ public class WindowBuilder {
 		this.shell = new Shell(d);
 		shell.setBounds(minSize);
 		shell.setMinimumSize(xSize, ySize);
-		shell.setMaximumSize(xSize, ySize + 300);
+//		shell.setMaximumSize(xSize, ySize + 300);
 		shell.setText("Manual Calculator v. 2.0");
 
 		FillLayout layout = new FillLayout(SWT.VERTICAL );
@@ -27,9 +27,7 @@ public class WindowBuilder {
 		layout.marginWidth = 10;
 		layout.spacing = 5;
 		
-
 		shell.setLayout(layout);
-
 		return shell;
 	}
 }

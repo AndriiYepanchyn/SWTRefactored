@@ -3,15 +3,21 @@ package swtRefactored;
 import java.util.ArrayList;
 
 public class History {
-	ArrayList<String> records;
-	public History(){
+	private ArrayList<String> records;
+
+	public History() {
 		records = new ArrayList<String>();
 	}
+
 	public void add(String value1, String operation, String value2, String result) {
 		records.add(value1 + " " + operation + " " + value2 + " = " + result + ";");
 	}
+
+	public ArrayList<String> get() {
+		return records;
+	}
 	
-	public String getHistoryAsHTML() {
+	public String getConvertedToHTML() {
 		String beginString = "<HTML><HEAD><TITLE>HTML Test</TITLE></HEAD><BODY>\n"
 				+ "<H3>===Operation history ===<p> </p></h3> \n" + "<ol>";
 		String finishString = "</ol><h4><p>===End of history records===</P></h4></BODY></HTML>";
@@ -24,4 +30,5 @@ public class History {
 
 		return answer.toString();
 	}
+
 }

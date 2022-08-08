@@ -12,12 +12,6 @@ public class ButtonEvaluateBuilder {
 		btnEvaluate.setBounds(10, 200, 150, 50);
 		btnEvaluate.setLocation(100,100);
 		btnEvaluate.setAlignment(SWT.CENTER);
-//		btnEvaluate.addListener(SWT.Selection, new Listener() {
-//			@Override
-//			public void handleEvent(Event event) {
-//				setTemporaryVariables(true);
-//			}
-//		});
 		return btnEvaluate;
 	}
 }

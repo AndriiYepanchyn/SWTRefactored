@@ -4,6 +4,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import swtRefactored.UIElements.WindowBuilder;
+import toRemove.UI;
 
 public class Main {
 
@@ -11,6 +12,7 @@ public class Main {
 		Display display = new Display();
 		Shell mainWindow = new WindowBuilder().build(display);
 		UI calc = new UI(mainWindow);
+		calc.run();
 
 		// Proceed_window
 		mainWindow.open();
