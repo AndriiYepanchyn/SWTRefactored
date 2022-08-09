@@ -18,7 +18,6 @@ public class CalculatorAppComposite{
 	private TabFolder tabFolder;
 	private TabItem calcTabItem, historyTabItem;
 	
-	private Composite firstPageComposite, secondPageComposite;
 	private CalculatorComposite calcPanel;
 	private HistoryComposite historyPanel;
 	
@@ -39,26 +38,19 @@ public class CalculatorAppComposite{
 		this.tabFolder.setLayout(new FillLayout());
 		this.tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		this.firstPageComposite = new Composite(tabFolder, SWT.BORDER);
-		this.firstPageComposite.setLayout(new GridLayout(1, true));
-		
-		this.secondPageComposite = new Composite(tabFolder, SWT.BORDER);
-		this.secondPageComposite.setLayout(new GridLayout(1, true));
-
-		this.calcPanel = new CalculatorComposite(firstPageComposite);
-		this.historyPanel = new HistoryComposite(secondPageComposite);
-		
+		this.calcPanel = new CalculatorComposite(tabFolder);
+		this.calcPanel.setLayout(new GridLayout(1,true));
+		this.historyPanel = new HistoryComposite(tabFolder);
+		this.historyPanel.setLayout(new GridLayout(1,true));
 		
 		this.calcTabItem = new TabItem(tabFolder, SWT.BORDER);
 		this.calcTabItem.setText(TITLE_CALCULATOR);
-		
-		
+				
 		this.historyTabItem = new TabItem(tabFolder, SWT.BORDER);
 		this.historyTabItem.setText(TITLE_HISTORY);
 	
-		
-		this.calcTabItem.setControl(firstPageComposite);
-		this.historyTabItem.setControl(secondPageComposite);
+		this.calcTabItem.setControl(calcPanel);
+		this.historyTabItem.setControl(historyPanel);
 	}
 
 	public HistoryComposite getHistoryComposite() {

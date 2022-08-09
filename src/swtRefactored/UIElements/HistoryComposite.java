@@ -14,11 +14,10 @@ public class HistoryComposite extends Composite {
 
 	public HistoryComposite(Composite parent) {
 		super(parent, SWT.BORDER);
-		createContent(parent);
+		createContent(this);
 	}
 
 	private void createContent(Composite parent) {
-		super.dispose();
 		browser = createBrowser(parent);
 	}
 	

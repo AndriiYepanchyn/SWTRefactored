@@ -24,11 +24,10 @@ public class CalculatorComposite extends Composite {
 
 	public CalculatorComposite(Composite parent) {
 		super(parent, SWT.BORDER);
-		createContent(parent);
+		createContent(this);
 	}
 
 	private void createContent(Composite parent) {
-		super.dispose();
 		Composite textAreaComposite, buttonAreaComposite;
 		dto = DataTransferObject.getInstance();
 
